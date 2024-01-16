@@ -56,6 +56,39 @@ declare namespace API {
     pageSize?: number;
   };
 
+  type BannerListItem = {
+    id?: string;
+    link?: string;
+    imageUrl?: string;
+  };
+
+  type BannerList = {
+    data?: BannerListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    pageSize?: number;
+    current?: number;
+    success?: boolean;
+  };
+
+  type SymbolListItem = {
+    symbolId?: string;
+    symbolName?: string;
+    sortNum?: number;
+    isPopular?: number;
+    createTime?: number;
+    modifyTime?: number;
+  };
+
+  type SymbolList = {
+    data?: SymbolListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    pageSize?: number;
+    current?: number;
+    success?: boolean;
+  };
+
   type RuleListItem = {
     key?: number;
     disabled?: boolean;

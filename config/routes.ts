@@ -48,9 +48,16 @@ export default [
   {
     name: 'list.symbol',
     icon: 'BarsOutlined',
-    path: '/symbol',
+    path: '/Symbol',
     access: 'canAdmin',
-    component: './TableList',
+    component: './Symbol',
+  },
+  {
+    name: 'list.banner',
+    icon: 'CloudUploadOutlined',
+    path: '/Banner',
+    access: 'canAdmin',
+    component: './Banner',
   },
   {
     name: 'list.good',

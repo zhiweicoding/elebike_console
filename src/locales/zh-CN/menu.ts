@@ -24,6 +24,7 @@ export default {
   'menu.list': '列表页',
   'menu.list.table-list': '查询表格',
   'menu.list.symbol': '分类表格',
+  'menu.list.banner': '轮播图',
   'menu.list.good': '商品表格',
   'menu.list.store': '门店表格',
   'menu.list.basic-list': '标准列表',
