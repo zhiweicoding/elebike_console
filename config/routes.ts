@@ -64,7 +64,7 @@ export default [
     icon: 'CarOutlined',
     path: '/good',
     access: 'canAdmin',
-    component: './TableList',
+    component: './Good',
   },
   {
     name: 'list.store',

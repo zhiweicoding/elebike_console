@@ -1,6 +1,12 @@
 import {delBanner, queryBanner, modifyBanner, addBanner} from '@/services/ant-design-pro/api';
 import {PlusOutlined} from '@ant-design/icons';
-import {ActionType, ProColumns, ProFormUploadDragger} from '@ant-design/pro-components';
+import {
+  ActionType,
+  ProColumns,
+  ProDescriptions,
+  type ProDescriptionsItemProps,
+  ProFormUploadDragger
+} from '@ant-design/pro-components';
 import {
   ModalForm,
   PageContainer,
@@ -8,7 +14,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import {FormattedMessage, useIntl} from '@umijs/max';
-import {Button, message} from 'antd';
+import {Button, Drawer, message} from 'antd';
 import React, {useRef, useState} from 'react';
 
 /**
@@ -274,6 +280,29 @@ const TableList: React.FC = () => {
         />
       </ModalForm>
 
+      <Drawer
+        width={600}
+        open={showDetail}
+        onClose={() => {
+          setCurrentRow(undefined);
+          setShowDetail(false);
+        }}
+        closable={false}
+      >
+        {currentRow?.id && (
+          <ProDescriptions<API.SymbolListItem>
+            column={2}
+            title={currentRow?.id}
+            request={async () => ({
+              data: currentRow || {},
+            })}
+            params={{
+              id: currentRow?.id,
+            }}
+            columns={columns as ProDescriptionsItemProps<API.SymbolListItem>[]}
+          />
+        )}
+      </Drawer>
     </PageContainer>
   );
 };

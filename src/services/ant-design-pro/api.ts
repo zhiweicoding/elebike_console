@@ -182,6 +182,75 @@ export async function delBanner(body: (string | undefined)[], options?: { [p: st
   });
 }
 
+/** query good POST /v1/page/good/ */
+export async function queryGood(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<API.GoodList>>('/v1/page/good/index', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": token || ''
+    },
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  }).then((res) => {
+    return res.msgBody;
+  });
+}
+
+/** add good POST */
+export async function addGood(body: API.GoodListItem, options?: { [key: string]: any }) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<string>>('/v1/page/good/save', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": token || ''
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** modify put */
+export async function modifyGood(body: API.GoodListItem, options?: { [key: string]: any }) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<string>>('/v1/page/good/update', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": token || ''
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** del good delete  */
+export async function delGood(body: (string | undefined)[], options?: { [p: string]: any }) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<string>>('/v1/page/good/removeList', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": token || ''
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 退出登录接口 POST /api/login/outLogin */
 export async function outLogin(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/login/outLogin', {

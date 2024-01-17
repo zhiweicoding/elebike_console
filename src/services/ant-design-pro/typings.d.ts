@@ -89,6 +89,37 @@ declare namespace API {
     success?: boolean;
   };
 
+  type GoodListItem = {
+    goodId?: string;
+    goodTitle?: string;
+    goodBrief?: string;
+    scenePicUrl?: string;
+    listPicUrl?: string;
+    floorPrice?: number;
+    retailPrice?: number;
+    marketPrice?: number;
+    goodNumber?: number;
+    photoUrl?: string;
+    photoUrlArray?: string[];
+    symbolId?: string;
+    isChosen?: number;
+    isNew?: number;
+    isCheap?: number;
+    likeNum?: number;
+    createTime?: number;
+    modifyTime?: number;
+    isDelete?: number;
+  };
+
+  type GoodList = {
+    data?: GoodListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    pageSize?: number;
+    current?: number;
+    success?: boolean;
+  };
+
   type RuleListItem = {
     key?: number;
     disabled?: boolean;
