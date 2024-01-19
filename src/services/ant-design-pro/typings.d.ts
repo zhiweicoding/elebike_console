@@ -76,6 +76,7 @@ declare namespace API {
     symbolName?: string;
     sortNum?: number;
     isPopular?: number;
+    place?: number;
     createTime?: number;
     modifyTime?: number;
   };

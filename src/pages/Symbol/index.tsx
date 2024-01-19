@@ -147,15 +147,27 @@ const TableList: React.FC = () => {
     },
     {
       title: '基地',
-      dataIndex: 'isPopular',
-      hideInForm: true,
-      search: false,
+      dataIndex: 'place',
       valueEnum: {
         1: {
           text: '天津基地',
         },
         0: {
           text: '无锡基地',
+        },
+      },
+    },
+    {
+      title: '新款',
+      dataIndex: 'isPopular',
+      valueEnum: {
+        1: {
+          text: '是',
+          status: 'Success',
+        },
+        0: {
+          text: '否',
+          status: 'Warning',
         },
       },
     },
@@ -265,6 +277,27 @@ const TableList: React.FC = () => {
           max={999999}
         />
         <ProFormRadio.Group
+          name="place"
+          label="生产基地"
+          rules={[
+            {
+              required: true,
+              message: (<FormattedMessage id="pages.searchTable.mustInput" defaultMessage="此项为必填项"/>),
+            },
+          ]}
+          radioType={"button"}
+          options={[
+            {
+              label: '天津',
+              value: '1',
+            },
+            {
+              label: '无锡',
+              value: '0',
+            },
+          ]}
+        />
+        <ProFormRadio.Group
           name="isPopular"
           label="是否新款"
           rules={[
@@ -344,6 +377,27 @@ const TableList: React.FC = () => {
           width="md"
           min={1}
           max={999999}
+        />
+        <ProFormRadio.Group
+          name="place"
+          label="生产基地"
+          rules={[
+            {
+              required: true,
+              message: (<FormattedMessage id="pages.searchTable.mustInput" defaultMessage="此项为必填项"/>),
+            },
+          ]}
+          radioType={"button"}
+          options={[
+            {
+              label: '天津',
+              value: '1',
+            },
+            {
+              label: '无锡',
+              value: '0',
+            },
+          ]}
         />
         <ProFormRadio.Group
           name="isPopular"
