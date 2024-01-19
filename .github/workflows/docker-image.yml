@@ -1,0 +1,29 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Build Project
+      run: npm run build
+
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t zhiweicoding/elebike_console:v1.0.1 .
+        echo csdiao210 | docker login -u loveqiqnqian --password-stdin
+        docker push zhiweicoding/elebike_console:v1.0.1
