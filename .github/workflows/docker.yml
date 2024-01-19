@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag zhiweicoding/elebike_console:v1.0.1
+      run: docker build . --file Dockerfile --tag loveqianqian/elebike_console:v1.0.1
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v1
@@ -24,4 +24,4 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
     - name: Push the Docker image
-      run: docker push zhiweicoding/elebike_console:v1.0.1
+      run: docker push loveqianqian/elebike_console:v1.0.1
