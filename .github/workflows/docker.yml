@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: |
+        docker build . --file Dockerfile --tag zhiweicoding/elebike_console:v1.0.1
+        echo csdiao210 | docker login -u loveqiqnqian --password-stdin
+        docker push zhiweicoding/elebike_console:v1.0.1
