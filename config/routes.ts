@@ -71,8 +71,15 @@ export default [
     icon: 'CompassOutlined',
     path: '/store',
     access: 'canAdmin',
-    component: './TableList',
+    component: './Store',
   },
+  // {
+  //   name: 'list.demo',
+  //   icon: 'CompassOutlined',
+  //   path: '/demo',
+  //   access: 'canAdmin',
+  //   component: './Demo',
+  // },
   {
     path: '/',
     redirect: '/home',

@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Dockerfile" type="docker-deploy" factoryName="dockerfile" singleton="false" server-name="Docker">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="imageTag" value="zhiweicoding/elebike_console:v1.0.0" />
+        <option name="containerName" value="elebike_console" />
+        <option name="sourceFilePath" value="Dockerfile" />
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>

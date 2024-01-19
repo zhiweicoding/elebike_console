@@ -152,7 +152,7 @@ const NewForm: React.FC<NewFormProps> = (props) => {
               message: '横图必传！',
             },
           ]}
-          max={1} label="上传横图(1027*428)" name="scenePicUrl" action="/v1/api/upload/common" />
+          max={1} label="上传横图(1027*428)" name="scenePicUrl" action="/proxy/v1/api/upload/common" />
         <ProFormUploadDragger
           rules={[
             {
@@ -160,7 +160,7 @@ const NewForm: React.FC<NewFormProps> = (props) => {
               message: '主图必传！',
             },
           ]}
-          max={1} label="上传主图(1:1)" name="listPicUrl" action="/v1/api/upload/common"/>
+          max={1} label="上传主图(1:1)" name="listPicUrl" action="/proxy/v1/api/upload/common"/>
       </StepsForm.StepForm>
       <StepsForm.StepForm
         title='设置详情图'
@@ -172,7 +172,7 @@ const NewForm: React.FC<NewFormProps> = (props) => {
               message: '至少上传一张！',
             },
           ]}
-          label="详情图(1080宽，长度随意，图片至少一张)" name="photoUrl" action="/v1/api/upload/common"/>
+          label="详情图(1080宽，长度随意，图片至少一张)" name="photoUrl" action="/proxy/v1/api/upload/common"/>
 
       </StepsForm.StepForm>
     </StepsForm>

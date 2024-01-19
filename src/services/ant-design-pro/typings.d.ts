@@ -89,6 +89,33 @@ declare namespace API {
     success?: boolean;
   };
 
+
+  type StoreListItem = {
+    storeId?: string;
+    storeName?: string;
+    storeDesc?: string;
+    storeLogo?: string;
+    phoneNum?: string;
+    backupPhoneNum?: string;
+    staffWx?: string;
+    address?: string;
+    goodNumber?: string;
+    lnglat?: string;
+    licenseUrl?: string;
+    createTime?: number;
+    modifyTime?: number;
+    isDelete?: number;
+  };
+
+  type StoreList = {
+    data?: StoreListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    pageSize?: number;
+    current?: number;
+    success?: boolean;
+  };
+
   type GoodListItem = {
     goodId?: string;
     goodTitle?: string;

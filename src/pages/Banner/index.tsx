@@ -233,7 +233,7 @@ const TableList: React.FC = () => {
         }}
       >
 
-        <ProFormUploadDragger max={1} label="上传图片" name="imageUrl" action="/v1/api/upload/common"/>
+        <ProFormUploadDragger max={1} label="上传图片" name="imageUrl" action="/proxy/v1/api/upload/common"/>
         <ProFormText
           width="md"
           label="跳转地址(没有不填)"

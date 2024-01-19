@@ -1,4 +1,4 @@
-import {addGood, delGood, modifyGood, queryGood, querySymbol} from '@/services/ant-design-pro/api';
+import {addStore, delStore, modifyStore, queryStore} from '@/services/ant-design-pro/api';
 import {PlusOutlined} from '@ant-design/icons';
 import {
   ActionType,
@@ -15,18 +15,18 @@ import {FormattedMessage, useIntl} from '@umijs/max';
 import {Button, Drawer, message} from 'antd';
 import React, {useRef, useState} from 'react';
 import UpdateForm from './components/UpdateForm';
-import ImgForm from "@/pages/Good/components/ImgForm";
-import NewForm from "@/pages/Good/components/NewForm";
+import ImgForm from "./components/ImgForm";
+import NewForm from "./components/NewForm";
 
 /**
  * @en-US Add node
  * @zh-CN 添加节点
  * @param fields
  */
-const handleAdd = async (fields: API.GoodListItem) => {
+const handleAdd = async (fields: API.StoreListItem) => {
   const hide = message.loading('正在添加');
   try {
-    await addGood({...fields});
+    await addStore({...fields});
     hide();
     message.success('添加成功');
     return true;
@@ -43,10 +43,10 @@ const handleAdd = async (fields: API.GoodListItem) => {
  *
  * @param fields
  */
-const handleUpdate = async (fields: API.GoodListItem) => {
+const handleUpdate = async (fields: API.StoreListItem) => {
   const hide = message.loading('正在修改');
   try {
-    await modifyGood(fields);
+    await modifyStore(fields);
     hide();
 
     message.success('修改成功');
@@ -64,12 +64,12 @@ const handleUpdate = async (fields: API.GoodListItem) => {
  *
  * @param selectedRows
  */
-const handleRemove = async (selectedRows: API.GoodListItem[]) => {
+const handleRemove = async (selectedRows: API.StoreListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    const idArray = selectedRows.map((row) => row.goodId)
-    await delGood(idArray);
+    const idArray = selectedRows.map((row) => row.storeId)
+    await delStore(idArray);
     hide();
     message.success('删除成功');
     return true;
@@ -95,13 +95,12 @@ const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const [showImg, setShowImg] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<string[]>([]);
-  const [showListPicUrl, setListPicUrl] = useState<boolean>(false);
-  const [showScenePicUrl, setScenePicUrl] = useState<boolean>(false);
-  const [showPhotoUrl, setPhotoUrl] = useState<boolean>(false);
+  const [showLogo, setLogo] = useState<boolean>(false);
+  const [showLicenseUrl, setLicenseUrl] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.GoodListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.GoodListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.StoreListItem>();
+  const [selectedRowsState, setSelectedRows] = useState<API.StoreListItem[]>([]);
 
   /**
    * @en-US International configuration
@@ -109,31 +108,10 @@ const TableList: React.FC = () => {
    * */
   const intl = useIntl();
 
-  const fetchSymbolData = async () => {
-    const hide = message.loading('正在获取品种数据');
-    try {
-      const response = await querySymbol({
-        current: 1,
-        pageSize: 100,
-      });
-      const array = response.data;
-
-      return array!.map(item => ({
-        label: item.symbolName,
-        value: item.symbolId,
-      }));
-    } catch (error) {
-      console.error('获取品种数据失败:', error);
-      return [];
-    }
-  };
-
-  const columns: ProColumns<API.GoodListItem>[] = [
+  const columns: ProColumns<API.StoreListItem>[] = [
     {
-      title: '商品标题',
-      dataIndex: 'goodTitle',
-      tip: '商品标题',
-      copyable: true,
+      title: '门店名称',
+      dataIndex: 'storeName',
       render: (dom, entity) => {
         return (
           <a
@@ -148,115 +126,76 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: '商品简介',
-      dataIndex: 'goodBrief',
+      title: '门店简介',
+      dataIndex: 'storeDesc',
       valueType: 'textarea',
     },
     {
-      title: '品种',
-      dataIndex: 'symbolId',
-      tip: '商品所属品种',
-      request: async () => await fetchSymbolData(),
-      valueType: 'select',
-    },
-    {
-      title: '活动图片',
-      dataIndex: 'scenePicUrl',
-      tip: '可以点击查看大图',
+      title: '门店Logo',
+      dataIndex: 'storeLogo',
       hideInForm: true,
       search: false,
       render: (dom, entity) => {
-        // @ts-ignore
         return (
-          <a
-            onClick={() => {
-              setImgUrl([entity.scenePicUrl || '']);
-              setShowImg(true);
-            }}
-          >
-            <img src={dom as string} alt="scenePicUrl" width={152} height={63}/>
+          <img src={dom as string} alt="storeLogo" width={63} height={63}/>
+        );
+      },
+    },
+    {
+      title: '电话号码',
+      dataIndex: 'phoneNum',
+    },
+    {
+      title: '备用号码',
+      dataIndex: 'backupPhoneNum',
+    },
+    {
+      title: '客服链接',
+      dataIndex: 'staffWx',
+      copyable: true,
+      render: (dom, entity) => {
+        console.log(dom)
+        return (
+          <a href={entity.staffWx as string}
+             target="_blank"
+             rel="noopener noreferrer">
+            点击测试
           </a>
         );
       },
     },
     {
-      title: '主图',
-      dataIndex: 'listPicUrl',
-      tip: '可以点击查看大图',
-      hideInForm: true,
-      search: false,
-      render: (dom, entity) => {
-        // @ts-ignore
-        return (
-          <a
-            onClick={() => {
-              setImgUrl([entity.listPicUrl || '']);
-              setShowImg(true);
-            }}
-          >
-            <img src={dom as string} alt="listPicUrl" width={63} height={63}/>
-          </a>
-        );
-      },
+      title: '地址',
+      dataIndex: 'address',
+      copyable: true,
     },
     {
-      title: '详情图(点击查看)',
-      dataIndex: 'photoUrl',
+      title: '经纬度',
+      dataIndex: 'lnglat',
+      copyable: true,
+    },
+    {
+      title: '营业执照',
+      dataIndex: 'licenseUrl',
       tip: '可以点击查看大图',
       hideInForm: true,
       search: false,
       render: (dom, entity) => {
-        const photoUrlArray = entity.photoUrlArray
-        if (photoUrlArray && photoUrlArray?.length > 0) {
-          return (<a
+        if (entity.licenseUrl && entity.licenseUrl !== '') {
+          return (
+            <a
               onClick={() => {
-                setImgUrl(entity.photoUrlArray || []);
+                setImgUrl([entity.licenseUrl || '']);
                 setShowImg(true);
               }}
-            ><img src={photoUrlArray[0]} alt="photoUrl" width={63} height={63}/></a>
+            >
+              <img src={dom as string} alt="licenseUrl" width={120} height={63}/>
+            </a>
           );
         } else {
-          return ''
+          return '';
         }
-      },
-    },
-    {
-      title: '市场价',
-      tip: '销售价格',
-      dataIndex: 'retailPrice',
-      hideInForm: true,
-      search: false,
-      renderText: (val: string) =>
-        `${val}元`,
-    },
-    {
-      title: '上新模块',
-      dataIndex: 'isNew',
-      hideInForm: true,
-      valueEnum: {
-        1: {
-          text: ('是'),
-          status: 'Success',
-        },
-        0: {
-          text: ('否'),
-          status: 'Processing',
-        }
-      },
-    },
-    {
-      title: '推荐模块',
-      dataIndex: 'isChosen',
-      hideInForm: true,
-      valueEnum: {
-        1: {
-          text: ('是'),
-          status: 'Success',
-        },
-        0: {
-          text: ('否'),
-          status: 'Processing',
-        }
+
       },
     },
     {
@@ -290,31 +229,22 @@ const TableList: React.FC = () => {
           修改
         </a>,
         <a
-          key="uploadMain"
+          key="uploadLogo"
           onClick={() => {
-            setListPicUrl(true);
+            setLogo(true);
             setCurrentRow(record);
           }}
         >
-          改主图
+          修改Logo
         </a>,
         <a
-          key="uploadhor"
+          key="uploadLicense"
           onClick={() => {
-            setScenePicUrl(true);
+            setLicenseUrl(true);
             setCurrentRow(record);
           }}
         >
-          改横图
-        </a>,
-        <a
-          key="uploadDetail"
-          onClick={() => {
-            setPhotoUrl(true);
-            setCurrentRow(record);
-          }}
-        >
-          改详情
+          修改营业执照
         </a>,
         <a key="del"
            onClick={() => {
@@ -333,13 +263,13 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.GoodListItem, API.PageParams>
+      <ProTable<API.StoreListItem, API.PageParams>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',
         })}
         actionRef={actionRef}
-        rowKey="goodId"
+        rowKey="storeId"
         search={{
           labelWidth: 120,
         }}
@@ -354,7 +284,7 @@ const TableList: React.FC = () => {
             <PlusOutlined/> <FormattedMessage id="pages.searchTable.new" defaultMessage="New"/>
           </Button>,
         ]}
-        request={queryGood}
+        request={queryStore}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -410,12 +340,13 @@ const TableList: React.FC = () => {
       <UpdateForm
         onSubmit={async (value) => {
           if (currentRow) {
-            currentRow.goodTitle = value.goodTitle;
-            currentRow.goodBrief = value.goodBrief;
-            currentRow.retailPrice = value.retailPrice;
-            currentRow.isNew = value.isNew;
-            currentRow.isChosen = value.isChosen;
-            currentRow.symbolId = value.symbolId;
+            currentRow.storeName = value.storeName;
+            currentRow.storeDesc = value.storeDesc;
+            currentRow.phoneNum = value.phoneNum;
+            currentRow.backupPhoneNum = value.backupPhoneNum;
+            currentRow.staffWx = value.staffWx;
+            currentRow.address = value.address;
+            currentRow.lnglat = value.lnglat;
           }
           const success = await handleUpdate(currentRow || {});
           if (success) {
@@ -445,37 +376,37 @@ const TableList: React.FC = () => {
         }}
         closable={false}
       >
-        {currentRow?.goodId && (
-          <ProDescriptions<API.GoodListItem>
+        {currentRow?.storeId && (
+          <ProDescriptions<API.StoreListItem>
             column={2}
-            title={currentRow?.goodId}
+            title={currentRow?.storeId}
             request={async () => ({
               data: currentRow || {},
             })}
             params={{
-              id: currentRow?.goodId,
+              id: currentRow?.storeId,
             }}
-            columns={columns as ProDescriptionsItemProps<API.GoodListItem>[]}
+            columns={columns as ProDescriptionsItemProps<API.StoreListItem>[]}
           />
         )}
       </Drawer>
       <ModalForm
-        title='修改主图'
+        title='修改营业执照'
         width="400px"
         autoFocusFirstInput
-        open={showListPicUrl}
+        open={showLicenseUrl}
         modalProps={{
           destroyOnClose: true,
           onCancel: () => console.log('run'),
         }}
-        onOpenChange={setListPicUrl}
+        onOpenChange={setLicenseUrl}
         onFinish={async (value) => {
           if (currentRow) {
-            currentRow.listPicUrl = value.listPicUrl[0].response;
+            currentRow.licenseUrl = value.licenseUrl[0].response;
           }
           const success = await handleUpdate(currentRow || {});
           if (success) {
-            setListPicUrl(false);
+            setLicenseUrl(false);
             if (actionRef.current) {
               actionRef.current.reload();
             }
@@ -486,28 +417,28 @@ const TableList: React.FC = () => {
           rules={[
             {
               required: true,
-              message: '主图必传！',
+              message: '如不上传，可关闭窗口！',
             },
           ]}
-          max={1} label="上传主图(1:1)" name="listPicUrl" action="/proxy/v1/api/upload/common"/>
+          max={1} label="上传营业执照" name="licenseUrl" action="/proxy/v1/api/upload/common"/>
       </ModalForm>
       <ModalForm
-        title='修改横图'
+        title='修改Logo'
         width="400px"
         autoFocusFirstInput
-        open={showScenePicUrl}
+        open={showLogo}
         modalProps={{
           destroyOnClose: true,
           onCancel: () => console.log('run'),
         }}
-        onOpenChange={setScenePicUrl}
+        onOpenChange={setLogo}
         onFinish={async (value) => {
           if (currentRow) {
-            currentRow.scenePicUrl = value.scenePicUrl[0].response;
+            currentRow.storeLogo = value.storeLogo[0].response;
           }
           const success = await handleUpdate(currentRow || {});
           if (success) {
-            setScenePicUrl(false);
+            setLogo(false);
             if (actionRef.current) {
               actionRef.current.reload();
             }
@@ -518,45 +449,10 @@ const TableList: React.FC = () => {
           rules={[
             {
               required: true,
-              message: '横图必传！',
+              message: '如不上传，可关闭窗口！',
             },
           ]}
-          max={1} label="上传横图(1027*428)" name="scenePicUrl" action="/proxy/v1/api/upload/common"/>
-      </ModalForm>
-      <ModalForm
-        title='修改详情图'
-        width="400px"
-        autoFocusFirstInput
-        open={showPhotoUrl}
-        onOpenChange={setPhotoUrl}
-        modalProps={{
-          destroyOnClose: true,
-          onCancel: () => console.log('run'),
-        }}
-        onFinish={async (value) => {
-          const photoUrlArray: Array<Record<string, any>> = value.photoUrl
-          const photoUrlList: string[] = photoUrlArray.map(item => String(item.response));
-
-          if (currentRow) {
-            currentRow.photoUrl = JSON.stringify(photoUrlList);
-          }
-          const success = await handleUpdate(currentRow || {});
-          if (success) {
-            setPhotoUrl(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-      >
-        <ProFormUploadDragger
-          rules={[
-            {
-              required: true,
-              message: '至少上传一张！',
-            },
-          ]}
-          label="详情图(1080宽，长度随意，图片至少一张)" name="photoUrl" action="/proxy/v1/api/upload/common"/>
+          max={1} label="上传Logo" name="storeLogo" action="/proxy/v1/api/upload/common"/>
       </ModalForm>
       <ImgForm
         onCancel={() => {

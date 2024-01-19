@@ -172,10 +172,7 @@ const Login: React.FC = () => {
 
           {msgBody && msgCode === 10000 && (
             <LoginMessage
-              content={intl.formatMessage({
-                id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误(admin/ant.design)',
-              })}
+              content='账户或密码错误'
             />
           )}
           {type === 'account' && (
@@ -186,10 +183,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined/>,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.username.placeholder',
-                  defaultMessage: '用户名: admin or user',
-                })}
+                placeholder='请输入用户名'
                 rules={[
                   {
                     required: true,
@@ -208,10 +202,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <LockOutlined/>,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
-                })}
+                placeholder='请输入密码'
                 rules={[
                   {
                     required: true,
