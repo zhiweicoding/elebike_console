@@ -146,22 +146,16 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.symbol.query.symbolName.isPopular" defaultMessage="是否新款"/>,
+      title: '基地',
       dataIndex: 'isPopular',
       hideInForm: true,
       search: false,
       valueEnum: {
         1: {
-          text: (
-            <FormattedMessage id="pages.symbol.query.popular.label.isPopular" defaultMessage="是"/>
-          ),
-          status: '是',
+          text: '天津基地',
         },
         0: {
-          text: (
-            <FormattedMessage id="pages.symbol.query.popular.label.isNotPopular" defaultMessage="不是"/>
-          ),
-          status: '不是',
+          text: '无锡基地',
         },
       },
     },
