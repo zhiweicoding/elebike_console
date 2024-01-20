@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v3
+
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
@@ -24,7 +26,6 @@ jobs:
     - name: Build the project
       run: npm run build
 
-    - uses: actions/checkout@v3
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag loveqianqian/elebike_console:v1.0.2
 
