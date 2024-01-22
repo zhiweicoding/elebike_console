@@ -158,7 +158,7 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: '新款',
+      title: '爆款',
       dataIndex: 'isPopular',
       valueEnum: {
         1: {
@@ -299,7 +299,7 @@ const TableList: React.FC = () => {
         />
         <ProFormRadio.Group
           name="isPopular"
-          label="是否新款"
+          label="是否爆款"
           rules={[
             {
               required: true,
@@ -401,7 +401,7 @@ const TableList: React.FC = () => {
         />
         <ProFormRadio.Group
           name="isPopular"
-          label="是否新款"
+          label="是否爆款"
           rules={[
             {
               required: true,
