@@ -121,9 +121,9 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: ('跳转地址'),
+      title: ('跳转地址-公众号文章'),
       dataIndex: 'link',
-      tooltip: '点击后的跳转地址',
+      tooltip: '点击后的跳转地址，可跳转公众号文章',
       hideInForm: true,
       search: false,
       render: (dom, entity) => {
