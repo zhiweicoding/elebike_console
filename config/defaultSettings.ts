@@ -1,4 +1,4 @@
-import {ProLayoutProps} from '@ant-design/pro-components';
+import { ProLayoutProps } from '@ant-design/pro-components';
 
 /**
  * @name
@@ -18,7 +18,7 @@ const Settings: ProLayoutProps & {
   colorWeak: false,
   title: '管理控制台',
   pwa: true,
-  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+  logo: 'https://bodocn-1256485110.cos.ap-beijing.myqcloud.com/baodao-removebg-preview.png',
   iconfontUrl: '',
   token: {
     // 参见ts声明，demo 见文档，通过token 修改样式

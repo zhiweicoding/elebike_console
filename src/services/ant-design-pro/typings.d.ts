@@ -2,7 +2,6 @@
 /* eslint-disable */
 
 declare namespace API {
-
   interface BaseResult<T> {
     msgInfo: string;
     msgCode: number; // 1000 success, 10001 fail, 1002 no auth
@@ -89,7 +88,6 @@ declare namespace API {
     current?: number;
     success?: boolean;
   };
-
 
   type StoreListItem = {
     storeId?: string;
@@ -212,5 +210,28 @@ declare namespace API {
     datetime?: string;
     description?: string;
     type?: NoticeIconItemType;
+  };
+
+  type ArticleListItem = {
+    id?: number;
+    articleId?: string;
+    title?: string;
+    author?: string;
+    photoUrl?: string;
+    orgContent?: string;
+    content?: string;
+    publishTime?: string;
+    createTime?: number;
+    modifyTime?: number;
+    isDelete?: number;
+  };
+
+  type ArticleList = {
+    data?: ArticleListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    pageSize?: number;
+    current?: number;
+    success?: boolean;
   };
 }

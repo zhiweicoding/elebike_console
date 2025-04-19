@@ -25,6 +25,8 @@ export default {
   'menu.list.table-list': '查询表格',
   'menu.list.symbol': '分类表格',
   'menu.list.banner': '轮播图',
+  'menu.list.pcBanner': 'PC轮播图',
+  'menu.list.article': '文章管理',
   'menu.list.good': '商品表格',
   'menu.list.store': '门店表格',
   'menu.list.demo': '测试',

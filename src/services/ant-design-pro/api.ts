@@ -1,6 +1,6 @@
 // @ts-ignore
 /* eslint-disable */
-import {request} from '@umijs/max';
+import { request } from '@umijs/max';
 
 /** 获取当前的用户 POST /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
@@ -9,7 +9,7 @@ export async function currentUser(options?: { [key: string]: any }) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     ...(options || {}),
   });
@@ -22,7 +22,7 @@ export async function queryStatistic(options?: { [key: string]: any }) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     ...(options || {}),
   });
@@ -35,7 +35,7 @@ export async function queryPie(options?: { [key: string]: any }) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     ...(options || {}),
   });
@@ -57,7 +57,7 @@ export async function querySymbol(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     params: {
       ...params,
@@ -78,7 +78,7 @@ export async function addSymbol(body: API.SymbolListItem, options?: { [key: stri
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -92,7 +92,7 @@ export async function modifySymbol(body: API.SymbolListItem, options?: { [key: s
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -106,7 +106,7 @@ export async function delSymbol(body: (string | undefined)[], options?: { [p: st
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -129,7 +129,7 @@ export async function queryBanner(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     params: {
       ...params,
@@ -147,7 +147,7 @@ export async function addBanner(body: API.BannerListItem, options?: { [key: stri
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -161,7 +161,7 @@ export async function modifyBanner(body: API.BannerListItem, options?: { [key: s
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -175,7 +175,7 @@ export async function delBanner(body: (string | undefined)[], options?: { [p: st
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -198,7 +198,7 @@ export async function queryStore(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     params: {
       ...params,
@@ -216,7 +216,7 @@ export async function addStore(body: API.StoreListItem, options?: { [key: string
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -230,7 +230,7 @@ export async function modifyStore(body: API.StoreListItem, options?: { [key: str
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -244,7 +244,7 @@ export async function delStore(body: (string | undefined)[], options?: { [p: str
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -267,7 +267,7 @@ export async function queryGood(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     params: {
       ...params,
@@ -285,7 +285,7 @@ export async function addGood(body: API.GoodListItem, options?: { [key: string]:
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -299,7 +299,7 @@ export async function modifyGood(body: API.GoodListItem, options?: { [key: strin
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -313,7 +313,7 @@ export async function delGood(body: (string | undefined)[], options?: { [p: stri
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      "Authorization": token || ''
+      Authorization: token || '',
     },
     data: body,
     ...(options || {}),
@@ -330,11 +330,10 @@ export async function outLogin(options?: { [key: string]: any }) {
 
 /** 登录接口 POST /api/login/account */
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
-
   return request<API.LoginResult>('/proxy/v1/page/login/in', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
     ...(options || {}),
@@ -348,7 +347,6 @@ export async function getNotices(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
-
 
 /** 获取规则列表 GET /api/rule */
 export async function rule(
@@ -390,6 +388,144 @@ export async function addRule(options?: { [key: string]: any }) {
 export async function removeRule(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/rule', {
     method: 'DELETE',
+    ...(options || {}),
+  });
+}
+
+/** 获取新闻列表 POST */
+export async function queryArticles(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<API.ArticleList>>('/proxy/v1/page/news/index', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token || '',
+    },
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  }).then((res) => {
+    return res.msgBody;
+  });
+}
+
+/** 添加新闻 POST */
+export async function addArticle(body: API.ArticleListItem, options?: { [key: string]: any }) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<string>>('/proxy/v1/page/news/save', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token || '',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 修改新闻 PUT */
+export async function modifyArticle(body: API.ArticleListItem, options?: { [key: string]: any }) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<string>>('/proxy/v1/page/news/update', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token || '',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 删除新闻 DELETE */
+export async function delArticle(body: (string | undefined)[], options?: { [p: string]: any }) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<string>>('/proxy/v1/page/news/removeList', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token || '',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取PC端轮播图 POST */
+export async function queryBpc(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+  },
+  options?: { [key: string]: any },
+) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<API.BannerList>>('/proxy/v1/page/bpc/index', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token || '',
+    },
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  }).then((res) => {
+    return res.msgBody;
+  });
+}
+
+/** 添加PC端轮播图 POST */
+export async function addBpc(body: API.BannerListItem, options?: { [key: string]: any }) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<string>>('/proxy/v1/page/bpc/save', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token || '',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 修改PC端轮播图 PUT */
+export async function modifyBpc(body: API.BannerListItem, options?: { [key: string]: any }) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<string>>('/proxy/v1/page/bpc/update', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token || '',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 删除PC端轮播图 DELETE */
+export async function delBpc(body: (string | undefined)[], options?: { [p: string]: any }) {
+  const token = localStorage.getItem('token');
+  return request<API.BaseResult<string>>('/proxy/v1/page/bpc/removeList', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token || '',
+    },
+    data: body,
     ...(options || {}),
   });
 }

@@ -1,4 +1,4 @@
-import { addBanner, delBanner, modifyBanner, queryBanner } from '@/services/ant-design-pro/api';
+import { addBpc, delBpc, modifyBpc, queryBpc } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import {
   ActionType,
@@ -11,7 +11,7 @@ import {
   ProTable,
   type ProDescriptionsItemProps,
 } from '@ant-design/pro-components';
-import { FormattedMessage, useIntl } from '@umijs/max';
+import { FormattedMessage } from '@umijs/max';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 
@@ -23,7 +23,7 @@ import React, { useRef, useState } from 'react';
 const handleAdd = async (fields: API.BannerListItem) => {
   const hide = message.loading('正在添加');
   try {
-    await addBanner({ ...fields });
+    await addBpc({ ...fields });
     hide();
     message.success('添加成功');
     return true;
@@ -43,7 +43,7 @@ const handleAdd = async (fields: API.BannerListItem) => {
 const handleUpdate = async (fields: API.BannerListItem) => {
   const hide = message.loading('正在修改');
   try {
-    await modifyBanner({ ...fields });
+    await modifyBpc({ ...fields });
     hide();
     message.success('修改成功');
     return true;
@@ -65,7 +65,7 @@ const handleRemove = async (selectedRows: API.BannerListItem[]) => {
   if (!selectedRows) return true;
   try {
     const idArray = selectedRows.map((row) => row.id);
-    await delBanner(idArray);
+    await delBpc(idArray);
     hide();
     message.success('删除成功');
     return true;
@@ -93,17 +93,11 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.BannerListItem>();
 
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
-  const intl = useIntl();
-
   const columns: ProColumns<API.BannerListItem>[] = [
     {
       title: 'ID',
       dataIndex: 'id',
-      tooltip: '轮播图的id',
+      tooltip: 'PC端轮播图的id',
       search: false,
       render: (dom, entity) => {
         return (
@@ -119,9 +113,9 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: '跳转地址-公众号文章',
+      title: '跳转地址-PC端页面',
       dataIndex: 'link',
-      tooltip: '点击后的跳转地址，可跳转公众号文章',
+      tooltip: '点击后的跳转地址',
       hideInForm: true,
       search: false,
       render: (dom, entity) => {
@@ -143,7 +137,6 @@ const TableList: React.FC = () => {
       hideInForm: true,
       search: false,
       render: (dom, entity) => {
-        // @ts-ignore
         return (
           <a
             onClick={() => {
@@ -157,7 +150,7 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
+      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="操作" />,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
@@ -186,10 +179,7 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.BannerListItem, API.PageParams>
-        headerTitle={intl.formatMessage({
-          id: 'pages.searchTable.title',
-          defaultMessage: 'Enquiry form',
-        })}
+        headerTitle="PC端轮播图列表"
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -204,17 +194,14 @@ const TableList: React.FC = () => {
               handleModalOpen(true);
             }}
           >
-            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
+            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="新建" />
           </Button>,
         ]}
-        request={queryBanner}
+        request={queryBpc}
         columns={columns}
       />
       <ModalForm
-        title={intl.formatMessage({
-          id: 'pages.symbol.query.createForm.new',
-          defaultMessage: '新建分类',
-        })}
+        title="新建PC端轮播图"
         width="400px"
         autoFocusFirstInput
         open={createModalOpen}
@@ -234,33 +221,23 @@ const TableList: React.FC = () => {
           label="上传图片"
           name="imageUrl"
           action="/proxy/v1/api/upload/common"
+          extra="推荐尺寸 1920x400"
         />
-        <ProFormText width="md" label="跳转地址(没有不填)" name="link" />
+        <ProFormText
+          width="md"
+          label="跳转地址(选填)"
+          name="link"
+          placeholder="请输入页面链接地址"
+        />
       </ModalForm>
       <ModalForm
         initialValues={currentRow || {}}
-        title={intl.formatMessage({
-          id: 'pages.symbol.query.modifyForm.modify',
-          defaultMessage: '修改',
-        })}
+        title="修改PC端轮播图"
         width="400px"
         open={updateModalOpen}
-        modalProps={{
-          destroyOnClose: true,
-          onCancel: () => {
-            handleUpdateModalOpen(false);
-            if (!showDetail) {
-              setCurrentRow(undefined);
-            }
-          },
-        }}
         onOpenChange={handleUpdateModalOpen}
         onFinish={async (value) => {
-          const updateParam = {
-            ...value,
-            id: currentRow?.id,
-          };
-          const success = await handleUpdate(updateParam);
+          const success = await handleUpdate(value as API.BannerListItem);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);
@@ -270,7 +247,8 @@ const TableList: React.FC = () => {
           }
         }}
       >
-        <ProFormText width="md" label="跳转地址(没有不填)" name="link" />
+        <ProFormText name="id" label="ID" width="md" disabled />
+        <ProFormText name="link" label="跳转地址" width="md" placeholder="请输入页面链接地址" />
       </ModalForm>
 
       <Drawer
@@ -283,7 +261,7 @@ const TableList: React.FC = () => {
         closable={false}
       >
         {currentRow?.id && (
-          <ProDescriptions<API.SymbolListItem>
+          <ProDescriptions<API.BannerListItem>
             column={2}
             title={currentRow?.id}
             request={async () => ({
@@ -292,7 +270,7 @@ const TableList: React.FC = () => {
             params={{
               id: currentRow?.id,
             }}
-            columns={columns as ProDescriptionsItemProps<API.SymbolListItem>[]}
+            columns={columns as ProDescriptionsItemProps<API.BannerListItem>[]}
           />
         )}
       </Drawer>

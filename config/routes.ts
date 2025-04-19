@@ -60,6 +60,20 @@ export default [
     component: './Banner',
   },
   {
+    name: 'list.pcBanner',
+    icon: 'CloudUploadOutlined',
+    path: '/BannerPC',
+    access: 'canAdmin',
+    component: './BannerPC',
+  },
+  {
+    name: 'list.article',
+    icon: 'FileTextOutlined',
+    path: '/article',
+    access: 'canAdmin',
+    component: './Article',
+  },
+  {
     name: 'list.good',
     icon: 'CarOutlined',
     path: '/good',

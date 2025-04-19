@@ -1,23 +1,17 @@
 import Footer from '@/components/Footer';
-import {login} from '@/services/ant-design-pro/api';
-import {
-  LockOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import {
-  LoginForm,
-  ProFormText,
-} from '@ant-design/pro-components';
-import {useEmotionCss} from '@ant-design/use-emotion-css';
-import {FormattedMessage, history, SelectLang, useIntl, useModel, Helmet} from '@umijs/max';
-import {Alert, message, Tabs} from 'antd';
-import Settings from '../../../../config/defaultSettings';
-import React, {useState} from 'react';
-import {flushSync} from 'react-dom';
+import { login } from '@/services/ant-design-pro/api';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LoginForm, ProFormText } from '@ant-design/pro-components';
+import { useEmotionCss } from '@ant-design/use-emotion-css';
+import { FormattedMessage, Helmet, history, SelectLang, useIntl, useModel } from '@umijs/max';
+import { Alert, message, Tabs } from 'antd';
 import CryptoJS from 'crypto-js';
+import React, { useState } from 'react';
+import { flushSync } from 'react-dom';
+import Settings from '../../../../config/defaultSettings';
 
 const Lang = () => {
-  const langClassName = useEmotionCss(({token}) => {
+  const langClassName = useEmotionCss(({ token }) => {
     return {
       width: 42,
       height: 42,
@@ -33,14 +27,14 @@ const Lang = () => {
 
   return (
     <div className={langClassName} data-lang>
-      {SelectLang && <SelectLang/>}
+      {SelectLang && <SelectLang />}
     </div>
   );
 };
 
 const LoginMessage: React.FC<{
   content: string;
-}> = ({content}) => {
+}> = ({ content }) => {
   return (
     <Alert
       style={{
@@ -56,7 +50,7 @@ const LoginMessage: React.FC<{
 const Login: React.FC = () => {
   const [userLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<string>('account');
-  const {initialState, setInitialState} = useModel('@@initialState');
+  const { initialState, setInitialState } = useModel('@@initialState');
 
   const containerClassName = useEmotionCss(() => {
     return {
@@ -96,13 +90,13 @@ const Login: React.FC = () => {
       const md5Password = CryptoJS.MD5(password).toString();
       values.timestamp = new Date().getTime();
       const token = CryptoJS.MD5(values.username + md5Password + values.timestamp).toString();
-      const msg = await login({...values, password: md5Password, type});
+      const msg = await login({ ...values, password: md5Password, type });
       if (msg.msgCode === 10000 && msg.msgBody) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
-        localStorage.setItem('token', `Bearer ${token}`)
+        localStorage.setItem('token', `Bearer ${token}`);
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
@@ -120,7 +114,7 @@ const Login: React.FC = () => {
       message.error(defaultLoginFailureMessage);
     }
   };
-  const {msgBody, msgCode} = userLoginState;
+  const { msgBody, msgCode } = userLoginState;
 
   return (
     <div className={containerClassName}>
@@ -133,7 +127,7 @@ const Login: React.FC = () => {
           - {Settings.title}
         </title>
       </Helmet>
-      <Lang/>
+      <Lang />
       <div
         style={{
           flex: '1',
@@ -145,9 +139,14 @@ const Login: React.FC = () => {
             minWidth: 280,
             maxWidth: '75vw',
           }}
-          logo={<img alt="logo" src="/logo.svg"/>}
-          title="管理工作台"
-          subTitle={intl.formatMessage({id: 'pages.layouts.userLayout.title'})}
+          logo={
+            <img
+              alt="logo"
+              src="https://bodocn-1256485110.cos.ap-beijing.myqcloud.com/baodao-removebg-preview.png"
+            />
+          }
+          title="宝岛管理工作台"
+          subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
           initialValues={{
             autoLogin: true,
           }}
@@ -166,24 +165,20 @@ const Login: React.FC = () => {
                   id: 'pages.login.accountLogin.tab',
                   defaultMessage: '账户密码登录',
                 }),
-              }
+              },
             ]}
           />
 
-          {msgBody && msgCode === 10000 && (
-            <LoginMessage
-              content='账户或密码错误'
-            />
-          )}
+          {msgBody && msgCode === 10000 && <LoginMessage content="账户或密码错误" />}
           {type === 'account' && (
             <>
               <ProFormText
                 name="username"
                 fieldProps={{
                   size: 'large',
-                  prefix: <UserOutlined/>,
+                  prefix: <UserOutlined />,
                 }}
-                placeholder='请输入用户名'
+                placeholder="请输入用户名"
                 rules={[
                   {
                     required: true,
@@ -200,9 +195,9 @@ const Login: React.FC = () => {
                 name="password"
                 fieldProps={{
                   size: 'large',
-                  prefix: <LockOutlined/>,
+                  prefix: <LockOutlined />,
                 }}
-                placeholder='请输入密码'
+                placeholder="请输入密码"
                 rules={[
                   {
                     required: true,
@@ -217,10 +212,9 @@ const Login: React.FC = () => {
               />
             </>
           )}
-
         </LoginForm>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
