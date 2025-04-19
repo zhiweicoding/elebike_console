@@ -21,7 +21,10 @@ jobs:
         node-version: '21' # 或者你项目所需的其他 Node.js 版本
 
     - name: Install dependencies
-      run: npm install
+      run: npm install --force
+
+    - name: Install react-quill explicitly
+      run: npm install react-quill@2.0.0
 
     - name: Build the project
       run: npm run build
