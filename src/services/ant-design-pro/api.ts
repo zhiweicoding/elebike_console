@@ -1,6 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from '@umijs/max';
+import md5 from 'md5';
 
 /** 获取当前的用户 POST /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
@@ -337,6 +338,17 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
     },
     data: body,
     ...(options || {}),
+  }).then((res) => {
+    // 登录成功后，保存token到localStorage
+    if (res.msgCode === 10000 && res.msgBody) {
+      // 生成token格式与后端一致 "Bearer " + MD5(username + password + timestamp)
+      const username = body.username || '';
+      const password = body.password || '';
+      const timestamp = body.timestamp || Date.now();
+      const token = `Bearer ${md5(username + password + timestamp)}`;
+      localStorage.setItem('token', token);
+    }
+    return res;
   });
 }
 

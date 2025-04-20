@@ -128,6 +128,7 @@ declare namespace API {
     photoUrl?: string;
     photoUrlArray?: string[];
     symbolId?: string;
+    pcSymbolId?: string;
     isChosen?: number;
     isNew?: number;
     isCheap?: number;

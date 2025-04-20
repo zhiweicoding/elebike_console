@@ -1,5 +1,13 @@
-import {addGood, delGood, modifyGood, queryGood, querySymbol} from '@/services/ant-design-pro/api';
-import {PlusOutlined} from '@ant-design/icons';
+import ImgForm from '@/pages/Good/components/ImgForm';
+import NewForm from '@/pages/Good/components/NewForm';
+import {
+  addGood,
+  delGood,
+  modifyGood,
+  queryGood,
+  querySymbol,
+} from '@/services/ant-design-pro/api';
+import { PlusOutlined } from '@ant-design/icons';
 import {
   ActionType,
   FooterToolbar,
@@ -9,14 +17,12 @@ import {
   ProDescriptions,
   ProDescriptionsItemProps,
   ProFormUploadDragger,
-  ProTable
+  ProTable,
 } from '@ant-design/pro-components';
-import {FormattedMessage, useIntl} from '@umijs/max';
-import {Button, Drawer, message} from 'antd';
-import React, {useRef, useState} from 'react';
+import { FormattedMessage, useIntl } from '@umijs/max';
+import { Button, Drawer, message } from 'antd';
+import React, { useRef, useState } from 'react';
 import UpdateForm from './components/UpdateForm';
-import ImgForm from "@/pages/Good/components/ImgForm";
-import NewForm from "@/pages/Good/components/NewForm";
 
 /**
  * @en-US Add node
@@ -26,7 +32,7 @@ import NewForm from "@/pages/Good/components/NewForm";
 const handleAdd = async (fields: API.GoodListItem) => {
   const hide = message.loading('正在添加');
   try {
-    await addGood({...fields});
+    await addGood({ ...fields });
     hide();
     message.success('添加成功');
     return true;
@@ -68,7 +74,7 @@ const handleRemove = async (selectedRows: API.GoodListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    const idArray = selectedRows.map((row) => row.goodId)
+    const idArray = selectedRows.map((row) => row.goodId);
     await delGood(idArray);
     hide();
     message.success('删除成功');
@@ -110,7 +116,7 @@ const TableList: React.FC = () => {
   const intl = useIntl();
 
   const fetchSymbolData = async () => {
-    const hide = message.loading('正在获取品种数据');
+    message.loading('正在获取品种数据');
     try {
       const response = await querySymbol({
         current: 1,
@@ -118,7 +124,7 @@ const TableList: React.FC = () => {
       });
       const array = response.data;
 
-      return array!.map(item => ({
+      return array!.map((item) => ({
         label: item.symbolName,
         value: item.symbolId,
       }));
@@ -132,7 +138,6 @@ const TableList: React.FC = () => {
     {
       title: '商品标题',
       dataIndex: 'goodTitle',
-      tip: '商品标题',
       copyable: true,
       render: (dom, entity) => {
         return (
@@ -155,14 +160,22 @@ const TableList: React.FC = () => {
     {
       title: '品种',
       dataIndex: 'symbolId',
-      tip: '商品所属品种',
       request: async () => await fetchSymbolData(),
       valueType: 'select',
     },
     {
+      title: 'PC端分类',
+      dataIndex: 'pcSymbolId',
+      hideInForm: true,
+      valueEnum: {
+        轻型电摩: { text: '轻型电摩' },
+        电动自行车: { text: '电动自行车' },
+        电动摩托车: { text: '电动摩托车' },
+      },
+    },
+    {
       title: '活动图片',
       dataIndex: 'scenePicUrl',
-      tip: '可以点击查看大图',
       hideInForm: true,
       search: false,
       render: (dom, entity) => {
@@ -174,7 +187,7 @@ const TableList: React.FC = () => {
               setShowImg(true);
             }}
           >
-            <img src={dom as string} alt="scenePicUrl" width={152} height={63}/>
+            <img src={dom as string} alt="scenePicUrl" width={152} height={63} />
           </a>
         );
       },
@@ -182,7 +195,6 @@ const TableList: React.FC = () => {
     {
       title: '主图',
       dataIndex: 'listPicUrl',
-      tip: '可以点击查看大图',
       hideInForm: true,
       search: false,
       render: (dom, entity) => {
@@ -194,7 +206,7 @@ const TableList: React.FC = () => {
               setShowImg(true);
             }}
           >
-            <img src={dom as string} alt="listPicUrl" width={63} height={63}/>
+            <img src={dom as string} alt="listPicUrl" width={63} height={63} />
           </a>
         );
       },
@@ -202,32 +214,32 @@ const TableList: React.FC = () => {
     {
       title: '详情图(点击查看)',
       dataIndex: 'photoUrl',
-      tip: '可以点击查看大图',
       hideInForm: true,
       search: false,
       render: (dom, entity) => {
-        const photoUrlArray = entity.photoUrlArray
+        const photoUrlArray = entity.photoUrlArray;
         if (photoUrlArray && photoUrlArray?.length > 0) {
-          return (<a
+          return (
+            <a
               onClick={() => {
                 setImgUrl(entity.photoUrlArray || []);
                 setShowImg(true);
               }}
-            ><img src={photoUrlArray[0]} alt="photoUrl" width={63} height={63}/></a>
+            >
+              <img src={photoUrlArray[0]} alt="photoUrl" width={63} height={63} />
+            </a>
           );
         } else {
-          return ''
+          return '';
         }
       },
     },
     {
       title: '市场价',
-      tip: '销售价格',
       dataIndex: 'retailPrice',
       hideInForm: true,
       search: false,
-      renderText: (val: string) =>
-        `${val}元`,
+      renderText: (val: string) => `${val}元`,
     },
     {
       title: '上新模块',
@@ -235,13 +247,13 @@ const TableList: React.FC = () => {
       hideInForm: true,
       valueEnum: {
         1: {
-          text: ('是'),
+          text: '是',
           status: 'Success',
         },
         0: {
-          text: ('否'),
+          text: '否',
           status: 'Processing',
-        }
+        },
       },
     },
     {
@@ -250,13 +262,13 @@ const TableList: React.FC = () => {
       hideInForm: true,
       valueEnum: {
         1: {
-          text: ('是'),
+          text: '是',
           status: 'Success',
         },
         0: {
-          text: ('否'),
+          text: '否',
           status: 'Processing',
-        }
+        },
       },
     },
     {
@@ -271,12 +283,12 @@ const TableList: React.FC = () => {
       valueType: 'dateTime',
       hideInForm: true,
       search: false,
-      renderFormItem: (item, {defaultRender, ...rest}, form) => {
+      renderFormItem: (item, { defaultRender }) => {
         return defaultRender(item);
       },
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating"/>,
+      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
@@ -316,15 +328,17 @@ const TableList: React.FC = () => {
         >
           改详情
         </a>,
-        <a key="del"
-           onClick={() => {
-             handleRemove([record]).then(r => {
-               setCurrentRow(undefined);
-               if (actionRef.current) {
-                 actionRef.current.reload();
-               }
-             });
-           }}>
+        <a
+          key="del"
+          onClick={() => {
+            handleRemove([record]).then(() => {
+              setCurrentRow(undefined);
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
+            });
+          }}
+        >
           删除
         </a>,
       ],
@@ -351,7 +365,7 @@ const TableList: React.FC = () => {
               handleModalOpen(true);
             }}
           >
-            <PlusOutlined/> <FormattedMessage id="pages.searchTable.new" defaultMessage="New"/>
+            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
         ]}
         request={queryGood}
@@ -366,9 +380,9 @@ const TableList: React.FC = () => {
         <FooterToolbar
           extra={
             <div>
-              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen"/>{' '}
-              <a style={{fontWeight: 600}}>{selectedRowsState.length}</a>{' '}
-              <FormattedMessage id="pages.searchTable.item" defaultMessage="项"/>
+              <FormattedMessage id="pages.searchTable.chosen" defaultMessage="Chosen" />{' '}
+              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+              <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
               &nbsp;&nbsp;
             </div>
           }
@@ -378,13 +392,20 @@ const TableList: React.FC = () => {
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
-          >取消</Button>
+          >
+            取消
+          </Button>
           <Button
-            type="primary" onClick={async () => {
-            await handleRemove(selectedRowsState);
-            setSelectedRows([]);
-            actionRef.current?.reloadAndRest?.();
-          }}> 批量删除</Button>
+            type="primary"
+            onClick={async () => {
+              await handleRemove(selectedRowsState);
+              setSelectedRows([]);
+              actionRef.current?.reloadAndRest?.();
+            }}
+          >
+            {' '}
+            批量删除
+          </Button>
         </FooterToolbar>
       )}
       <NewForm
@@ -416,6 +437,7 @@ const TableList: React.FC = () => {
             currentRow.isNew = value.isNew;
             currentRow.isChosen = value.isChosen;
             currentRow.symbolId = value.symbolId;
+            currentRow.pcSymbolId = value.pcSymbolId;
           }
           const success = await handleUpdate(currentRow || {});
           if (success) {
@@ -426,7 +448,7 @@ const TableList: React.FC = () => {
             }
           }
         }}
-        onCancel={(visible) => {
+        onCancel={() => {
           handleUpdateModalOpen(false);
           if (!updateModalOpen) {
             setCurrentRow(undefined);
@@ -460,7 +482,7 @@ const TableList: React.FC = () => {
         )}
       </Drawer>
       <ModalForm
-        title='修改主图'
+        title="修改主图"
         width="400px"
         autoFocusFirstInput
         open={showListPicUrl}
@@ -489,10 +511,14 @@ const TableList: React.FC = () => {
               message: '主图必传！',
             },
           ]}
-          max={1} label="上传主图(1:1)" name="listPicUrl" action="/proxy/v1/api/upload/common"/>
+          max={1}
+          label="上传主图(1:1)"
+          name="listPicUrl"
+          action="/proxy/v1/api/upload/common"
+        />
       </ModalForm>
       <ModalForm
-        title='修改横图'
+        title="修改横图"
         width="400px"
         autoFocusFirstInput
         open={showScenePicUrl}
@@ -521,10 +547,14 @@ const TableList: React.FC = () => {
               message: '横图必传！',
             },
           ]}
-          max={1} label="上传横图(1027*428)" name="scenePicUrl" action="/proxy/v1/api/upload/common"/>
+          max={1}
+          label="上传横图(1027*428)"
+          name="scenePicUrl"
+          action="/proxy/v1/api/upload/common"
+        />
       </ModalForm>
       <ModalForm
-        title='修改详情图'
+        title="修改详情图"
         width="400px"
         autoFocusFirstInput
         open={showPhotoUrl}
@@ -534,8 +564,8 @@ const TableList: React.FC = () => {
           onCancel: () => console.log('run'),
         }}
         onFinish={async (value) => {
-          const photoUrlArray: Array<Record<string, any>> = value.photoUrl
-          const photoUrlList: string[] = photoUrlArray.map(item => String(item.response));
+          const photoUrlArray: Array<Record<string, any>> = value.photoUrl;
+          const photoUrlList: string[] = photoUrlArray.map((item) => String(item.response));
 
           if (currentRow) {
             currentRow.photoUrl = JSON.stringify(photoUrlList);
@@ -556,7 +586,10 @@ const TableList: React.FC = () => {
               message: '至少上传一张！',
             },
           ]}
-          label="详情图(1080宽，长度随意，图片至少一张)" name="photoUrl" action="/proxy/v1/api/upload/common"/>
+          label="详情图(1080宽，长度随意，图片至少一张)"
+          name="photoUrl"
+          action="/proxy/v1/api/upload/common"
+        />
       </ModalForm>
       <ImgForm
         onCancel={() => {

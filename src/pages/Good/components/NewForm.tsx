@@ -1,16 +1,14 @@
+import { querySymbol } from '@/services/ant-design-pro/api';
 import {
-  ProFormDateTimePicker, ProFormDigit,
-  ProFormRadio,
+  ProFormDigit,
   ProFormSelect,
   ProFormText,
-  ProFormTextArea, ProFormUploadDragger,
+  ProFormTextArea,
+  ProFormUploadDragger,
   StepsForm,
 } from '@ant-design/pro-components';
-import {FormattedMessage, useIntl} from '@umijs/max';
-import {message, Modal} from 'antd';
+import { message, Modal } from 'antd';
 import React from 'react';
-import {querySymbol} from "@/services/ant-design-pro/api";
-
 
 export type NewFormProps = {
   onCancel: (flag?: boolean, formVals?: API.GoodListItem) => void;
@@ -20,7 +18,6 @@ export type NewFormProps = {
 };
 
 const NewForm: React.FC<NewFormProps> = (props) => {
-  const intl = useIntl();
   return (
     <StepsForm
       stepsProps={{
@@ -30,9 +27,9 @@ const NewForm: React.FC<NewFormProps> = (props) => {
         return (
           <Modal
             width={640}
-            style={{padding: '32px 40px 48px'}}
+            style={{ padding: '32px 40px 48px' }}
             destroyOnClose
-            title='新建商品'
+            title="新建商品"
             open={props.modalOpen}
             footer={submitter}
             onCancel={() => {
@@ -45,10 +42,10 @@ const NewForm: React.FC<NewFormProps> = (props) => {
       }}
       onFinish={props.onSubmit}
     >
-      <StepsForm.StepForm title='基本信息'>
+      <StepsForm.StepForm title="基本信息">
         <ProFormText
           name="goodTitle"
-          label='标题'
+          label="标题"
           rules={[
             {
               required: true,
@@ -58,8 +55,8 @@ const NewForm: React.FC<NewFormProps> = (props) => {
         />
         <ProFormTextArea
           name="goodBrief"
-          label='简介'
-          placeholder='请输入商品简介'
+          label="简介"
+          placeholder="请输入商品简介"
           rules={[
             {
               required: true,
@@ -78,7 +75,7 @@ const NewForm: React.FC<NewFormProps> = (props) => {
           ]}
           debounceTime={1000}
           request={async () => {
-            const hide = message.loading('正在获取品种数据');
+            message.loading('正在获取品种数据');
             try {
               const response = await querySymbol({
                 current: 1,
@@ -86,7 +83,7 @@ const NewForm: React.FC<NewFormProps> = (props) => {
               });
               const array = response.data;
 
-              return array!.map(item => ({
+              return array!.map((item) => ({
                 label: item.symbolName,
                 value: item.symbolId,
               }));
@@ -95,6 +92,22 @@ const NewForm: React.FC<NewFormProps> = (props) => {
               return [];
             }
           }}
+        />
+        <ProFormSelect
+          name="pcSymbolId"
+          label="PC端分类"
+          rules={[
+            {
+              required: true,
+              message: '请选择PC端分类！',
+            },
+          ]}
+          valueEnum={{
+            轻型电摩: '轻型电摩',
+            电动自行车: '电动自行车',
+            电动摩托车: '电动摩托车',
+          }}
+          placeholder="请选择PC端分类"
         />
         <ProFormDigit
           label="市场价"
@@ -107,7 +120,7 @@ const NewForm: React.FC<NewFormProps> = (props) => {
               message: '价格不能为空！',
             },
           ]}
-          fieldProps={{precision: 2}}
+          fieldProps={{ precision: 2 }}
         />
         <ProFormSelect
           name="isNew"
@@ -118,12 +131,10 @@ const NewForm: React.FC<NewFormProps> = (props) => {
               message: '请选择！',
             },
           ]}
-          valueEnum={
-            {
-              1: '是',
-              0: '否',
-            }
-          }
+          valueEnum={{
+            1: '是',
+            0: '否',
+          }}
         />
         <ProFormSelect
           name="isChosen"
@@ -134,17 +145,13 @@ const NewForm: React.FC<NewFormProps> = (props) => {
               message: '请选择！',
             },
           ]}
-          valueEnum={
-            {
-              1: '是',
-              0: '否',
-            }
-          }
+          valueEnum={{
+            1: '是',
+            0: '否',
+          }}
         />
       </StepsForm.StepForm>
-      <StepsForm.StepForm
-        title='上传图片'
-      >
+      <StepsForm.StepForm title="上传图片">
         <ProFormUploadDragger
           rules={[
             {
@@ -152,7 +159,11 @@ const NewForm: React.FC<NewFormProps> = (props) => {
               message: '横图必传！',
             },
           ]}
-          max={1} label="上传横图(1027*428)" name="scenePicUrl" action="/proxy/v1/api/upload/common" />
+          max={1}
+          label="上传横图(1027*428)"
+          name="scenePicUrl"
+          action="/proxy/v1/api/upload/common"
+        />
         <ProFormUploadDragger
           rules={[
             {
@@ -160,11 +171,13 @@ const NewForm: React.FC<NewFormProps> = (props) => {
               message: '主图必传！',
             },
           ]}
-          max={1} label="上传主图(1:1)" name="listPicUrl" action="/proxy/v1/api/upload/common"/>
+          max={1}
+          label="上传主图(1:1)"
+          name="listPicUrl"
+          action="/proxy/v1/api/upload/common"
+        />
       </StepsForm.StepForm>
-      <StepsForm.StepForm
-        title='设置详情图'
-      >
+      <StepsForm.StepForm title="设置详情图">
         <ProFormUploadDragger
           rules={[
             {
@@ -172,8 +185,10 @@ const NewForm: React.FC<NewFormProps> = (props) => {
               message: '至少上传一张！',
             },
           ]}
-          label="详情图(1080宽，长度随意，图片至少一张)" name="photoUrl" action="/proxy/v1/api/upload/common"/>
-
+          label="详情图(1080宽，长度随意，图片至少一张)"
+          name="photoUrl"
+          action="/proxy/v1/api/upload/common"
+        />
       </StepsForm.StepForm>
     </StepsForm>
   );

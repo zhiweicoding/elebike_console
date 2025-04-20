@@ -1,5 +1,7 @@
-﻿import type { RequestOptions } from '@@/plugin-request/request';
+﻿import { getToken, hasToken, removeToken } from '@/utils/crypto';
+import type { RequestOptions } from '@@/plugin-request/request';
 import type { RequestConfig } from '@umijs/max';
+import { history } from '@umijs/max';
 import { message, notification } from 'antd';
 
 // 错误处理方案： 错误类型
@@ -18,6 +20,8 @@ interface ResponseStructure {
   errorMessage?: string;
   showType?: ErrorShowType;
 }
+
+const loginPath = '/user/login';
 
 /**
  * @name 错误处理
@@ -71,6 +75,13 @@ export const errorConfig: RequestConfig = {
         }
       } else if (error.response) {
         // Axios 的错误
+        // 处理401未授权错误
+        if (error.response.status === 401) {
+          message.error('登录已过期，请重新登录');
+          removeToken();
+          history.push(loginPath);
+          return;
+        }
         // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
         message.error(`Response status:${error.response.status}`);
       } else if (error.request) {
@@ -88,9 +99,28 @@ export const errorConfig: RequestConfig = {
   // 请求拦截器
   requestInterceptors: [
     (config: RequestOptions) => {
-      // 拦截请求配置，进行个性化处理。
-      const url = config?.url?.concat('?token = 123');
-      return { ...config, url };
+      // 不需要token的白名单路径
+      const whiteList = ['/proxy/v1/page/login/in'];
+
+      // 如果不是白名单中的请求，则添加token
+      if (whiteList.indexOf(config.url as string) === -1) {
+        // 使用crypto工具检查token
+        if (!hasToken()) {
+          message.error('登录已过期，请重新登录');
+          // 重定向到登录页，不再请求后端
+          setTimeout(() => {
+            history.push(loginPath);
+          }, 1000);
+        } else {
+          // 将token添加到请求头
+          config.headers = {
+            ...config.headers,
+            Authorization: getToken(),
+          };
+        }
+      }
+
+      return config;
     },
   ],
 
@@ -98,11 +128,20 @@ export const errorConfig: RequestConfig = {
   responseInterceptors: [
     (response) => {
       // 拦截响应数据，进行个性化处理
-      const { data } = response as unknown as ResponseStructure;
+      const { data } = response as any;
 
-      if (data?.success === false) {
-        message.error('请求失败！');
+      // 处理后端返回的授权错误（token无效或过期）
+      if (data?.msgCode === 1002) {
+        // 授权错误码
+        message.error('登录已过期，请重新登录');
+        // 清除本地存储的token
+        removeToken();
+        // 使用setTimeout确保消息显示后再跳转
+        setTimeout(() => {
+          history.push(loginPath);
+        }, 1000);
       }
+
       return response;
     },
   ],

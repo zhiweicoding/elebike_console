@@ -1,5 +1,6 @@
 import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
+import { generateToken, saveToken } from '@/utils/crypto';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
@@ -88,22 +89,27 @@ const Login: React.FC = () => {
       }
       //把password转成md5
       const md5Password = CryptoJS.MD5(password).toString();
-      values.timestamp = new Date().getTime();
-      const token = CryptoJS.MD5(values.username + md5Password + values.timestamp).toString();
+      const timestamp = new Date().getTime();
+      values.timestamp = timestamp;
+
+      // 生成token
+      const token = generateToken(values.username || '', md5Password, timestamp);
+
       const msg = await login({ ...values, password: md5Password, type });
-      if (msg.msgCode === 10000 && msg.msgBody) {
+      if (msg.msgCode === 1000 && msg.msgBody) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
-        localStorage.setItem('token', `Bearer ${token}`);
+        // 使用工具函数保存token
+        saveToken(token);
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');
         return;
       } else {
-        message.error(msg.msgBody);
+        message.error(msg.msgInfo || '登录失败');
       }
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({

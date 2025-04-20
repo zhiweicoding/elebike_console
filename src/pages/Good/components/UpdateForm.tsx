@@ -1,16 +1,12 @@
+import { querySymbol } from '@/services/ant-design-pro/api';
 import {
   ModalForm,
-  ProFormDateTimePicker, ProFormDigit,
-  ProFormRadio,
+  ProFormDigit,
   ProFormSelect,
   ProFormText,
   ProFormTextArea,
-  StepsForm,
 } from '@ant-design/pro-components';
-import {FormattedMessage, useIntl} from '@umijs/max';
-import {message, Modal} from 'antd';
 import React from 'react';
-import {querySymbol} from "@/services/ant-design-pro/api";
 
 export type UpdateFormProps = {
   onCancel: (flag?: boolean, formVals?: API.GoodListItem) => void;
@@ -20,11 +16,10 @@ export type UpdateFormProps = {
 };
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
-  const intl = useIntl();
   return (
     <ModalForm
       initialValues={props.values}
-      title='修改详情图'
+      title="修改详情图"
       width="400px"
       autoFocusFirstInput
       open={props.updateModalOpen}
@@ -41,7 +36,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     >
       <ProFormText
         name="goodTitle"
-        label='标题'
+        label="标题"
         rules={[
           {
             required: true,
@@ -51,8 +46,8 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       />
       <ProFormTextArea
         name="goodBrief"
-        label='简介'
-        placeholder='请输入商品简介'
+        label="简介"
+        placeholder="请输入商品简介"
         rules={[
           {
             required: true,
@@ -71,7 +66,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         ]}
         debounceTime={1000}
         request={async () => {
-          const hide = message.loading('正在获取品种数据');
           try {
             const response = await querySymbol({
               current: 1,
@@ -79,7 +73,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             });
             const array = response.data;
 
-            return array!.map(item => ({
+            return array!.map((item) => ({
               label: item.symbolName,
               value: item.symbolId,
             }));
@@ -88,6 +82,22 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             return [];
           }
         }}
+      />
+      <ProFormSelect
+        name="pcSymbolId"
+        label="PC端分类"
+        rules={[
+          {
+            required: true,
+            message: '请选择PC端分类！',
+          },
+        ]}
+        valueEnum={{
+          轻型电摩: '轻型电摩',
+          电动自行车: '电动自行车',
+          电动摩托车: '电动摩托车',
+        }}
+        placeholder="请选择PC端分类"
       />
       <ProFormDigit
         label="市场价"
@@ -100,7 +110,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             message: '价格不能为空！',
           },
         ]}
-        fieldProps={{precision: 2}}
+        fieldProps={{ precision: 2 }}
       />
       <ProFormSelect
         name="isNew"
@@ -111,12 +121,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             message: '请选择！',
           },
         ]}
-        valueEnum={
-          {
-            1: '是',
-            0: '否',
-          }
-        }
+        valueEnum={{
+          1: '是',
+          0: '否',
+        }}
       />
       <ProFormSelect
         name="isChosen"
@@ -127,12 +135,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             message: '请选择！',
           },
         ]}
-        valueEnum={
-          {
-            1: '是',
-            0: '否',
-          }
-        }
+        valueEnum={{
+          1: '是',
+          0: '否',
+        }}
       />
     </ModalForm>
   );
