@@ -96,7 +96,7 @@ const Login: React.FC = () => {
       const token = generateToken(values.username || '', md5Password, timestamp);
 
       const msg = await login({ ...values, password: md5Password, type });
-      if (msg.msgCode === 1000 && msg.msgBody) {
+      if (msg.msgCode === 10000 && msg.msgBody) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
