@@ -21,6 +21,7 @@ import ArticleContent from './components/ArticleContent';
 import ImgForm from './components/ImgForm';
 import NewForm from './components/NewForm';
 import UpdateForm from './components/UpdateForm';
+import { hasInlineBase64Images } from '@/utils/qiniuUpload';
 
 /**
  * 添加文章
@@ -258,6 +259,12 @@ const TableList: React.FC = () => {
             value.photoUrl = value.photoUrl[0].response || value.photoUrl[0];
           }
 
+          // 检查内容中是否包含base64图片
+          if (value.orgContent && hasInlineBase64Images(value.orgContent)) {
+            message.warning('文章中存在未上传的图片，请等待所有图片上传完成后再提交');
+            return;
+          }
+
           // 将富文本内容转换为纯文本形式存储在content字段中
           if (value.orgContent) {
             const tempDiv = document.createElement('div');
@@ -279,6 +286,12 @@ const TableList: React.FC = () => {
       />
       <UpdateForm
         onSubmit={async (value) => {
+          // 检查内容中是否包含base64图片
+          if (value.orgContent && hasInlineBase64Images(value.orgContent)) {
+            message.warning('文章中存在未上传的图片，请等待所有图片上传完成后再提交');
+            return;
+          }
+
           // 将富文本内容转换为纯文本形式存储在content字段中
           if (value.orgContent) {
             const tempDiv = document.createElement('div');
