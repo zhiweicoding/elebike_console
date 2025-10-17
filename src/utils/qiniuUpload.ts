@@ -50,7 +50,8 @@ export async function getQiniuToken(): Promise<{ token: string; domain: string }
     // 仅使用资源访问域名或环境变量，绝不使用上传域名
     const domainFromServer = normalizeDomain(body.domain);
     const domainFromEnv = normalizeDomain(process.env.REACT_APP_QINIU_DOMAIN);
-    const domain = domainFromServer || domainFromEnv || '';
+    const defaultDomain = normalizeDomain('https://photo.myloveqian.cn');
+    const domain = domainFromServer || domainFromEnv || defaultDomain;
 
     if (!token) {
       throw new Error('无法获取七牛云上传凭证');
