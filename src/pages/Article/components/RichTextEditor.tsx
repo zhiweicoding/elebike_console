@@ -90,6 +90,10 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           const file = dataURLtoFile(img.src, 'pasted.png');
           const { url } = await uploadImageToQiniu(file);
           img.setAttribute('src', url);
+          // 通知 Quill 内容发生变化，确保受控值同步
+          try {
+            (quill as any).update && (quill as any).update('user');
+          } catch {}
         } catch (error) {
           console.error('替换base64图片失败:', error);
           // 保留base64，让用户手动处理

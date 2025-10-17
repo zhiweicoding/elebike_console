@@ -6,8 +6,8 @@ import { message } from 'antd';
 type QiniuTokenResp = {
   token?: string;
   uptoken?: string;
-  domain?: string;
-  host?: string;
+  domain?: string; // 资源访问域名（必须是可公开访问的域名，如 https://xxx.qnssl.com）
+  host?: string; // 上传域名（upload-z1.qiniup.com 等）—不可用于资源访问
 };
 
 // 上传配置选项
@@ -22,19 +22,35 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 // 允许的图片类型
 const ALLOWED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp'];
 
+function normalizeDomain(domain?: string): string {
+  if (!domain) return '';
+  let d = domain.trim();
+  // 去掉尾部斜杠
+  if (d.endsWith('/')) d = d.slice(0, -1);
+  // 补全协议
+  if (!/^https?:\/\//i.test(d)) {
+    d = `https://${d}`;
+  }
+  return d;
+}
+
 /**
  * 从后端获取七牛云上传token
  * 注意：AK/SK必须保存在后端，前端通过接口获取临时token
  */
 export async function getQiniuToken(): Promise<{ token: string; domain: string }> {
   try {
-    const resp = await request<API.Response>('/proxy/v1/api/qiniu/token', {
+    const resp = await request<API.Response>('/proxy/v1/page/qiniu/token', {
       method: 'GET',
     });
 
-    const body = resp?.msgBody || resp || {};
+    const body: QiniuTokenResp = (resp?.msgBody as any) || (resp as any) || {};
     const token = body.token || body.uptoken;
-    const domain = body.domain || body.host || process.env.REACT_APP_QINIU_DOMAIN || '';
+
+    // 仅使用资源访问域名或环境变量，绝不使用上传域名
+    const domainFromServer = normalizeDomain(body.domain);
+    const domainFromEnv = normalizeDomain(process.env.REACT_APP_QINIU_DOMAIN);
+    const domain = domainFromServer || domainFromEnv || '';
 
     if (!token) {
       throw new Error('无法获取七牛云上传凭证');
@@ -112,7 +128,7 @@ export async function uploadImageToQiniu(
     const config = {
       useCdnDomain: true,
       region: undefined, // 自动识别区域
-    };
+    } as qiniu.Config;
 
     // 执行上传
     return new Promise((resolve, reject) => {
@@ -134,14 +150,14 @@ export async function uploadImageToQiniu(
         complete: (res: any) => {
           subscription.unsubscribe();
 
-          // 构建完整的图片URL
+          // 构建完整的图片URL（必须使用资源访问域名）
           let url: string;
           if (domain) {
-            url = domain.endsWith('/') ? `${domain}${key}` : `${domain}/${key}`;
+            url = `${domain}/${key}`;
           } else {
-            // 如果没有域名配置，返回key（需要后续配置域名）
+            // 没有配置访问域名时，回退为仅返回 key；前端会提示用户配置域名
             url = res?.key || key;
-            console.warn('未配置七牛云域名，返回的URL可能不完整');
+            console.warn('[Qiniu] 未配置资源访问域名，已仅返回 key');
           }
 
           resolve({ url, key });
