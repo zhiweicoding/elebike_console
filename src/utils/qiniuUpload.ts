@@ -40,7 +40,7 @@ function normalizeDomain(domain?: string): string {
  */
 export async function getQiniuToken(): Promise<{ token: string; domain: string }> {
   try {
-    const resp = await request<API.Response>('/proxy/v1/page/qiniu/token', {
+    const resp = await request<API.Response>('/proxy/v1/api/qiniu/token', {
       method: 'GET',
     });
 

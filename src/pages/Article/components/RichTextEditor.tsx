@@ -57,7 +57,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         if (quill) {
           const range = quill.getSelection(true);
           const index = range ? range.index : quill.getLength();
-          quill.insertEmbed(index, 'image', url, 'user');
+          quill.insertEmbed(index, 'image', url, 'api');
           quill.setSelection(index + 1, 0);
         }
         message.success('图片上传成功');
@@ -163,7 +163,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           const { url } = await uploadImageToQiniu(file);
           const range = quill.getSelection(true);
           const index = range ? range.index : quill.getLength();
-          quill.insertEmbed(index, 'image', url, 'user');
+          quill.insertEmbed(index, 'image', url, 'api');
           quill.setSelection(index + 1, 0);
         }
 
@@ -194,7 +194,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           const { url } = await uploadImageToQiniu(file);
           const range = quill.getSelection(true);
           const index = range ? range.index : quill.getLength();
-          quill.insertEmbed(index, 'image', url, 'user');
+          quill.insertEmbed(index, 'image', url, 'api');
           quill.setSelection(index + 1, 0);
         }
 
