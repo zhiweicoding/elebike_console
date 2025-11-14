@@ -77,6 +77,7 @@ const Login: React.FC = () => {
         }));
       });
     }
+    return userInfo;
   };
 
   const handleSubmit = async (values: API.LoginParams) => {
@@ -104,9 +105,18 @@ const Login: React.FC = () => {
         // 使用工具函数保存token
         saveToken(token);
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
+        const userInfo = await fetchUserInfo();
+        // 根据平台类型跳转到默认页面
+        const platformType = userInfo?.platformType;
+        if (platformType === 'cn') {
+          history.push('/article'); // 中文网站跳转到文章管理
+        } else if (platformType === 'miniapp') {
+          history.push('/Symbol'); // 小程序跳转到分类表格
+        } else if (platformType === 'en') {
+          history.push('/BannerPC'); // 英文网站跳转到PC轮播图
+        } else {
+          history.push('/article'); // 默认跳转到文章管理
+        }
         return;
       } else {
         message.error(msg.msgInfo || '登录失败');

@@ -22,12 +22,6 @@ export default [
       },
     ],
   },
-  {
-    path: '/home',
-    name: 'home',
-    icon: 'home',
-    component: './Home',
-  },
   // {
   //   path: '/admin',
   //   name: 'admin',
@@ -49,43 +43,71 @@ export default [
     name: 'list.symbol',
     icon: 'BarsOutlined',
     path: '/Symbol',
-    access: 'canAdmin',
+    access: 'canAccessMiniApp',
     component: './Symbol',
   },
   {
     name: 'list.banner',
     icon: 'CloudUploadOutlined',
     path: '/Banner',
-    access: 'canAdmin',
+    access: 'canAccessMiniApp',
     component: './Banner',
   },
   {
     name: 'list.pcBanner',
     icon: 'CloudUploadOutlined',
     path: '/BannerPC',
-    access: 'canAdmin',
+    access: 'canAccessEN',
     component: './BannerPC',
   },
   {
     name: 'list.article',
     icon: 'FileTextOutlined',
     path: '/article',
-    access: 'canAdmin',
+    access: 'canAccessPC',
     component: './Article',
   },
   {
     name: 'list.good',
     icon: 'CarOutlined',
     path: '/good',
-    access: 'canAdmin',
+    access: 'canAccessMiniApp', // 小程序使用 Good 页面（t_good 表）
     component: './Good',
+  },
+  {
+    name: 'list.bikeGoodEn',
+    icon: 'CarOutlined',
+    path: '/bike-good-en',
+    access: 'canAccessEN', // 英文网站使用 BikeGoodEn 页面（bikes_en 表）
+    component: './BikeGoodEn',
+  },
+  {
+    name: 'list.bikeGood',
+    icon: 'CarOutlined',
+    path: '/bike-good',
+    access: 'canAccessCN', // 中文网站使用 BikeGood 页面（bikes 表）
+    component: './BikeGood',
   },
   {
     name: 'list.store',
     icon: 'CompassOutlined',
     path: '/store',
-    access: 'canAdmin',
+    access: 'canAccessMiniApp',
     component: './Store',
+  },
+  {
+    name: 'list.enquiry',
+    icon: 'ContactsOutlined',
+    path: '/enquiry',
+    access: 'canAccessEN',
+    component: './Enquiry',
+  },
+  {
+    name: 'list.visitorMap',
+    icon: 'EnvironmentOutlined',
+    path: '/visitor-map',
+    access: 'canAccessEN',
+    component: './VisitorMap',
   },
   // {
   //   name: 'list.demo',
@@ -96,7 +118,7 @@ export default [
   // },
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/article',
   },
   {
     path: '*',

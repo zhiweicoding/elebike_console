@@ -142,6 +142,18 @@ export const errorConfig: RequestConfig = {
         }, 1000);
       }
 
+      // 处理后端返回的未登录状态
+      if (data?.msgCode === 10003) {
+        // 未登录状态码
+        message.error(data.msgBody || '没有登录状态，请登录');
+        // 清除本地存储的token
+        removeToken();
+        // 使用setTimeout确保消息显示后再跳转
+        setTimeout(() => {
+          history.push(loginPath);
+        }, 1000);
+      }
+
       return response;
     },
   ],

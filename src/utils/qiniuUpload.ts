@@ -1,6 +1,6 @@
 import { request } from '@umijs/max';
-import * as qiniu from 'qiniu-js';
 import { message } from 'antd';
+import * as qiniu from 'qiniu-js';
 
 // 七牛云Token响应类型
 type QiniuTokenResp = {

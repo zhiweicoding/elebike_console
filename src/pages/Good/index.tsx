@@ -24,68 +24,6 @@ import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import UpdateForm from './components/UpdateForm';
 
-/**
- * @en-US Add node
- * @zh-CN 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.GoodListItem) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addGood({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败，请稍后重试');
-    return false;
-  }
-};
-
-/**
- * @en-US Update node
- * @zh-CN 更新节点
- *
- * @param fields
- */
-const handleUpdate = async (fields: API.GoodListItem) => {
-  const hide = message.loading('正在修改');
-  try {
-    await modifyGood(fields);
-    hide();
-
-    message.success('修改成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('修改失败，请稍后重试!');
-    return false;
-  }
-};
-
-/**
- *  Delete node
- * @zh-CN 删除节点
- *
- * @param selectedRows
- */
-const handleRemove = async (selectedRows: API.GoodListItem[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    const idArray = selectedRows.map((row) => row.goodId);
-    await delGood(idArray);
-    hide();
-    message.success('删除成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请稍后重试');
-    return false;
-  }
-};
-
 const TableList: React.FC = () => {
   /**
    * @en-US Pop-up window of new window
@@ -114,6 +52,64 @@ const TableList: React.FC = () => {
    * @zh-CN 国际化配置
    * */
   const intl = useIntl();
+
+  /**
+   * 新增商品
+   */
+  const handleAdd = async (fields: API.GoodListItem) => {
+    const hide = message.loading('正在添加');
+    try {
+      await addGood(fields);
+      hide();
+      message.success('添加成功');
+      return true;
+    } catch (error) {
+      hide();
+      message.error('添加失败，请重试！');
+      return false;
+    }
+  };
+
+  /**
+   * 更新商品
+   */
+  const handleUpdate = async (fields: API.GoodListItem) => {
+    const hide = message.loading('正在更新');
+    try {
+      await modifyGood(fields);
+      hide();
+      message.success('更新成功');
+      return true;
+    } catch (error) {
+      hide();
+      message.error('更新失败，请重试！');
+      return false;
+    }
+  };
+
+  /**
+   * 删除商品
+   */
+  const handleRemove = async (selectedRows: API.GoodListItem[]) => {
+    const hide = message.loading('正在删除');
+    if (!selectedRows || selectedRows.length === 0) return true;
+    try {
+      await Promise.all(
+        selectedRows.map((row) =>
+          delGood({
+            goodId: row.goodId,
+          }),
+        ),
+      );
+      hide();
+      message.success('删除成功');
+      return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败，请重试！');
+      return false;
+    }
+  };
 
   const fetchSymbolData = async () => {
     message.loading('正在获取品种数据');

@@ -10,6 +10,9 @@ declare namespace API {
     isEmpty?: boolean;
   }
 
+  // Generic response type for any API calls
+  type Response<T = any> = BaseResult<T>;
+
   type CurrentUser = {
     name?: string;
     avatar?: string;
@@ -19,6 +22,7 @@ declare namespace API {
     title?: string;
     group?: string;
     adminRole?: number;
+    platformType?: string;
     tags?: { key?: string; label?: string }[];
     notifyCount?: number;
     unreadCount?: number;
